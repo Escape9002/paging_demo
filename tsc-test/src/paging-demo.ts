@@ -22,17 +22,31 @@ let pageTables = [
   ],
 ];
 
-let userInput: string = "000";
-let handInAdresses: string[] = userInput.split("");
-let addressBits: number[] = [0, 0, 0];
-for (let i = 0; i < handInAdresses.length; i++) {
-  addressBits[i] = handInAdresses[i] as unknown as number;
-}
+import * as readline from "readline";
 
-let firstHit: number = pageDirectory[addressBits[0]][0] as number;
-let secondHit: number = pageTables[addressBits[firstHit]][
-  addressBits[1]
-][0] as number;
-let thirdHit: number = addressBits[2];
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-console.log(firstHit, secondHit, thirdHit);
+let userInput: string;
+
+rl.question("Whats the magic address: 0x", (answer) => {
+  userInput = answer;
+
+  let handInAdresses: string[] = userInput.split("");
+
+  let addressBits: number[] = [0, 0, 0];
+  for (let i = 0; i < handInAdresses.length; i++) {
+    addressBits[i] = handInAdresses[i] as unknown as number;
+  }
+
+  let firstHit: number = pageDirectory[addressBits[0]][0] as number;
+  let secondHit: number = pageTables[addressBits[firstHit]][
+    addressBits[1]
+  ][0] as number;
+  let thirdHit: number = addressBits[2];
+
+  console.log(firstHit, secondHit, thirdHit);
+  rl.close();
+});
