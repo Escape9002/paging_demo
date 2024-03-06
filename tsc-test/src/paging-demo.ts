@@ -1,52 +1,55 @@
-let pageDirectory = [
-  [0x0, "u", "rw", "p"],
-  [0x1, "u", "rw", "p"],
-  [0x2, "u", "rw", "p"],
-];
-
-let pageTables = [
-  [
-    [0x3, "u", "rw", "p"],
-    [0x4, "u", "rw", "p"],
-    [0x5, "u", "rw", "p"],
-  ],
-  [
-    [0x6, "u", "rw", "p"],
-    [0x7, "u", "rw", "p"],
-    [0x8, "u", "rw", "p"],
-  ],
-  [
-    [0x9, "u", "rw", "p"],
-    [0xa, "u", "rw", "p"],
-    [0xb, "u", "rw", "p"],
-  ],
-];
-
 import * as readline from "readline";
+import { pageTable } from "./Tables";
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-let userInput: string;
+let pageDirectory = new pageTable([
+  [0x0, 1, 1, 1, 1],
+  [0x1, 1, 1, 1, 1],
+  [0x2, 1, 1, 1, 1],
+]);
 
-rl.question("Whats the magic address: 0x", (answer) => {
-  userInput = answer;
+let pageTables = [
+  new pageTable([
+    [0x3, 1, 1, 1, 1],
+    [0x4, 1, 1, 1, 1],
+    [0x5, 1, 1, 1, 1],
+  ]),
+  new pageTable([
+    [0x6, 1, 1, 1, 1],
+    [0x7, 1, 1, 1, 1],
+    [0x8, 1, 1, 1, 1],
+  ]),
+  new pageTable([
+    [0x9, 1, 1, 1, 1],
+    [0xa, 1, 1, 1, 1],
+    [0xb, 1, 1, 1, 1],
+  ]),
+];
 
-  let handInAdresses: string[] = userInput.split("");
+let input: number[] = [0, 1, 0, 1, 1, 1, 1];
 
-  let addressBits: number[] = [0, 0, 0];
-  for (let i = 0; i < handInAdresses.length; i++) {
-    addressBits[i] = handInAdresses[i] as unknown as number;
-  }
+console.log("input: ", input);
 
-  let firstHit: number = pageDirectory[addressBits[0]][0] as number;
-  let secondHit: number = pageTables[addressBits[firstHit]][
-    addressBits[1]
-  ][0] as number;
-  let thirdHit: number = addressBits[2];
+let firstHit: number = pageDirectory.getAddr(
+  input[0],
+  input[4],
+  input[5],
+  input[6]
+);
+console.log(firstHit);
 
-  console.log(firstHit, secondHit, thirdHit);
-  rl.close();
-});
+let secondHit: number = pageTables[firstHit as number].getAddr(
+  input[1],
+  input[4],
+  input[5],
+  input[6]
+);
+console.log(secondHit);
+let thirdHit: number = input[2];
+
+console.log(firstHit, secondHit, thirdHit);
+rl.close();
