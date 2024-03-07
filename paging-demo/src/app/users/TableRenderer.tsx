@@ -1,16 +1,19 @@
 import React from "react";
+
 interface table {
+  tableName: string;
   table: number[][];
   markedId: number;
 }
 
-function PageTablesRender(table: table) {
+function TableRenderer(table: table) {
+  const tableName: string = table.tableName;
   const pagetable: number[][] = table.table;
   const markedId: number = table.markedId;
 
   return (
     <>
-      <h1>Page Directory</h1>
+      <h1>{tableName}</h1>
       <table className="table table-bordered w-auto">
         <thead>
           <tr>
@@ -45,4 +48,4 @@ function PageTablesRender(table: table) {
   );
 }
 
-export default PageTablesRender;
+export default TableRenderer;
