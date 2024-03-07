@@ -8,15 +8,15 @@
  ]
 */
 
-export class pageTable {
-  entries: number[][];
+class PageTable {
+  table: number[][];
 
   constructor(entries: number[][]) {
-    this.entries = entries;
+    this.table = entries;
   }
 
   public getTable(): number[][] {
-    return this.entries;
+    return this.table;
   }
 
   public getAddr(addr: number, mode: number, r: number, w: number): number {
@@ -35,12 +35,12 @@ export class pageTable {
       return 0xffffff;
     }
 
-    return this.entries[addr][0];
+    return this.table[addr][0];
   }
 
   checkPersistent(addr: number): boolean {
     // check peristent byte
-    if (this.entries[addr][4]) {
+    if (this.table[addr][4]) {
       return true;
     }
     return false;
@@ -48,7 +48,7 @@ export class pageTable {
 
   checkAccessMode(addr: number, mode: number): boolean {
     // check access mode is correct
-    if (this.entries[addr][1] === mode) {
+    if (this.table[addr][1] === mode) {
       return true;
     }
     return false;
@@ -56,14 +56,16 @@ export class pageTable {
 
   checkRW(addr: number, r: number, w: number): boolean {
     // check read byte
-    if (this.entries[addr][3] === r) {
+    if (this.table[addr][3] === r) {
       return true;
     }
 
     // check write byte
-    if (this.entries[addr][4] === w) {
+    if (this.table[addr][4] === w) {
       return true;
     }
     return false;
   }
 }
+
+export default PageTable;
