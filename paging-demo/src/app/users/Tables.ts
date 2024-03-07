@@ -1,12 +1,4 @@
-/*
-[
-  addr, 
-  user(1)||kernel(0),
-  read(1||0),
-  write(1||0),
-  persistent(1||o)
- ]
-*/
+import React from "react";
 
 class PageTable {
   table: number[][];
@@ -15,11 +7,11 @@ class PageTable {
     this.table = entries;
   }
 
-  public getTable(): number[][] {
+  getTable(): number[][] {
     return this.table;
   }
 
-  public getAddr(addr: number, mode: number, r: number, w: number): number {
+  getAddr(addr: number, mode: number, r: number, w: number): number {
     if (!this.checkPersistent(addr)) {
       console.log("failed persitency check");
       return 0xffffff;
