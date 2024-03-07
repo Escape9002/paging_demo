@@ -1,5 +1,4 @@
 import React from "react";
-
 interface table {
   tableName: string;
   table: number[][];
