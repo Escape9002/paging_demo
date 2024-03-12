@@ -1,17 +1,16 @@
-import React from "react";
-
+// "use client";
 class PageTable {
-  table: number[][];
+  public table: number[][];
 
   constructor(entries: number[][]) {
     this.table = entries;
   }
 
-  getTable(): number[][] {
+  public getTable(): number[][] {
     return this.table;
   }
 
-  getAddr(addr: number, mode: number, r: number, w: number): number {
+  public getAddr(addr: number, mode: number, r: number, w: number): number {
     if (!this.checkPersistent(addr)) {
       console.log("failed persitency check");
       return 0xffffff;
@@ -30,7 +29,7 @@ class PageTable {
     return this.table[addr][0];
   }
 
-  checkPersistent(addr: number): boolean {
+  private checkPersistent(addr: number): boolean {
     // check peristent byte
     if (this.table[addr][4]) {
       return true;
@@ -38,7 +37,7 @@ class PageTable {
     return false;
   }
 
-  checkAccessMode(addr: number, mode: number): boolean {
+  private checkAccessMode(addr: number, mode: number): boolean {
     // check access mode is correct
     if (this.table[addr][1] === mode) {
       return true;
@@ -46,7 +45,7 @@ class PageTable {
     return false;
   }
 
-  checkRW(addr: number, r: number, w: number): boolean {
+  private checkRW(addr: number, r: number, w: number): boolean {
     // check read byte
     if (this.table[addr][3] === r) {
       return true;

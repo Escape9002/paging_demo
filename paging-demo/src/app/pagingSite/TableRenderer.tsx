@@ -1,12 +1,14 @@
+// "use client";
 import React from "react";
+
 interface table {
-  tableName: string;
+  tableName: number | string;
   table: number[][];
   markedId: number;
 }
 
 function TableRenderer(table: table) {
-  const tableName: string = table.tableName;
+  const tableName: number | string = table.tableName;
   const pagetable: number[][] = table.table;
   const markedId: number = table.markedId;
 
@@ -20,27 +22,22 @@ function TableRenderer(table: table) {
             <th>user</th>
             <th>read</th>
             <th>write</th>
-            <th>persistent</th>
+            <th>persistentant</th>
           </tr>
         </thead>
         <tbody>
-          {table.table.map((entry) =>
-            markedId === entry[0] ? (
-              <tr className="bg-red-400">
-                {" "}
-                {entry.map((values) => (
-                  <td> {values}</td>
-                ))}
-              </tr>
-            ) : (
-              <tr>
-                {" "}
-                {entry.map((values) => (
-                  <td> {values}</td>
-                ))}
-              </tr>
-            )
-          )}
+          {pagetable.map((entry, index) => (
+            <tr key={index}>
+              {entry.map((value, subIndex) => (
+                <td
+                  key={subIndex}
+                  className={markedId === entry[0] ? "bg-red-400" : ""}
+                >
+                  {value}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

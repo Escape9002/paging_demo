@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main>
       <h1>Hello There again! </h1>
-      <Link href="/users"> Users</Link>
+      <Link href="/pagingSite"> Paging</Link>
       <ProductCard />
     </main>
   );

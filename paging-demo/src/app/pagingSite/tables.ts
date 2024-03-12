@@ -2,9 +2,9 @@ import page from "./page";
 import PageTable from "./PageTable";
 
 export let pageDirectory = new PageTable([
-  [0x0, 1, 0, 1, 1],
-  [0x1, 0, 1, 0, 1],
-  [0x2, 1, 0, 1, 0],
+  [0x0, 1, 1, 1, 1],
+  [0x1, 1, 1, 1, 1],
+  [0x2, 1, 1, 1, 0],
 ]);
 
 export let pageTables = [
