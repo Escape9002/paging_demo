@@ -28,7 +28,7 @@ function PageTableView(props: props) {
   const pageShift = addr[2];
 
   return (
-    <div className=" p-2 flex flex-col">
+    <div className=" p-2 flex flex-row">
       <div className="p-2 border border-spacing-4 border-4 border-red-900">
         <TableRenderer
           tableName="Page Directory"
@@ -39,7 +39,7 @@ function PageTableView(props: props) {
 
       <div className="pl-10 flex flex-row border border-spacing-4 border-4 border-sky-800">
         <div>
-            <p>PageTables</p>
+          <p>PageTables</p>
           <div>
             {pageTables.map((table, index) => (
               <div key={index} className="flex flex-col">
@@ -50,7 +50,7 @@ function PageTableView(props: props) {
                 />
               </div>
             ))}
-          </div>  
+          </div>
         </div>
       </div>
 

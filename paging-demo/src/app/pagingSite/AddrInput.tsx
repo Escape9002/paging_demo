@@ -6,21 +6,42 @@ function AddrInput() {
   const [addr, setAddr] = useState("000");
 
   return (
-    <input
-      name=" hello there"
-      defaultValue="0x000"
-      onChange={(e) => deStringInput(e.target.value)}
-    />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        deStringInput(addr);
+      }}
+    >
+      <input
+        name="addrField"
+        type="virtual Address"
+        placeholder="0x000"
+        className="input input-bordered w-full max-w-xs"
+        onChange={(e) => setAddr(e.target.value)}
+      />
+      <select className="select select-bordered w-full max-w-xs">
+        <option>User</option>
+        <option>Kernel</option>
+      </select>
+      <button>Send</button>
+    </form>
   );
 }
 
 function deStringInput(input: string) {
-  const inputBits = input.split("");
-  console.log(inputBits);
-  if (inputBits.length > 3) {
+  const userInput = input.split("");
+
+  if (userInput.length > 5) {
     console.log("These where too many values");
     return;
   }
+
+  let inputBits: number[] = [];
+  for (let i = 2; i < userInput.length; i++) {
+    inputBits.push(userInput[i] as unknown as number);
+  }
+
+  console.log(inputBits);
   return inputBits;
 }
 
