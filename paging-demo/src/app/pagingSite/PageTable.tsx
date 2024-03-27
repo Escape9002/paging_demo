@@ -29,6 +29,7 @@ class PageTable {
     return this.table[addr][0];
   }
 
+  // notice, they return FALSE, when they FAIL the check!
   private checkPersistent(addr: number): boolean {
     // check peristent byte
     if (this.table[addr][4]) {
@@ -47,15 +48,15 @@ class PageTable {
 
   private checkRW(addr: number, r: number, w: number): boolean {
     // check read byte
-    if (this.table[addr][3] === r) {
-      return true;
+    if (this.table[addr][2] !== r) {
+      return false;
     }
 
     // check write byte
-    if (this.table[addr][4] === w) {
-      return true;
+    if (this.table[addr][3] !== w) {
+      return false;
     }
-    return false;
+    return true;
   }
 }
 

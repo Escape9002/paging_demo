@@ -2,7 +2,15 @@
 
 import React, { useState } from "react";
 
-function AddrInput() {
+interface props {
+  bitAddr: number[];
+  mode: number;
+}
+
+function AddrInput(props: props) {
+  const [bitAddr, setBitAddr] = useState(props.bitAddr);
+  const [mode, setMode] = useState(props.mode);
+
   const [addr, setAddr] = useState("000");
 
   return (
@@ -12,13 +20,18 @@ function AddrInput() {
         deStringInput(addr);
       }}
     >
-      <input
-        name="addrField"
-        type="virtual Address"
-        placeholder="0x000"
-        className="input input-bordered w-full max-w-xs"
-        onChange={(e) => setAddr(e.target.value)}
-      />
+      <p>
+        0x
+        <input
+          name="addrField"
+          type="virtual Address"
+          placeholder="000"
+          className="input input-bordered w-full max-w-xs"
+          required
+          defaultValue={"000"}
+          onChange={(e) => setAddr(e.target.value)}
+        />
+      </p>
       <select className="select select-bordered w-full max-w-xs">
         <option>User</option>
         <option>Kernel</option>
@@ -26,23 +39,20 @@ function AddrInput() {
       <button>Send</button>
     </form>
   );
-}
 
-function deStringInput(input: string) {
-  const userInput = input.split("");
+  function deStringInput(input: string) {
+    const userInput = input.split("");
 
-  if (userInput.length > 5) {
-    console.log("These where too many values");
-    return;
+    if (userInput.length > 3) {
+      console.log("These where too many values");
+      return;
+    }
+
+    console.log(userInput);
+    setBitAddr(userInput as unknown as number[]);
+
+    return userInput;
   }
-
-  let inputBits: number[] = [];
-  for (let i = 2; i < userInput.length; i++) {
-    inputBits.push(userInput[i] as unknown as number);
-  }
-
-  console.log(inputBits);
-  return inputBits;
 }
 
 export default AddrInput;
