@@ -11,6 +11,6 @@ export default class PageTableEntry {
     if ((flags = flags)) {
       return this.addr;
     }
-    return null;
+    return 666;
   }
 }
