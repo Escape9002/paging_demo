@@ -18,15 +18,17 @@ export default class Vaddr {
   }
 
   parseUserInput(vaddr: string): number[] {
-    let splitVAddr: number[] = [];
+    let splitVAddr: Array<number> = [];
 
-    for (let i = 0; i < this.arch.level; i++) {
-      splitVAddr.push(
-        vaddr.substring(
-          i * this.arch.idxSize - 1,
-          i * this.arch.idxSize + this.arch.idxSize - 1
-        ) as unknown as number
+    for (let i = 0; i < this.arch.level + 1; i++) {
+      let vaddrStr: string = vaddr.substring(
+        i * this.arch.idxSize,
+        i * this.arch.idxSize + this.arch.idxSize
       );
+
+      let vaddrNumber: number = parseInt(vaddrStr, 16);
+
+      splitVAddr.push(vaddrNumber);
     }
     return splitVAddr;
   }
