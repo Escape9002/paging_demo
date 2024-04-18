@@ -4,7 +4,7 @@ import Arch, {
   ptTable_1,
   ptTable_2,
   ptTable_3,
-} from './Arch';
+} from './arch/Arch';
 import PageTable from './PageTable';
 import PageTableEntry from './PageTableEntry';
 import PageTableMem from './PageTableMem';
@@ -18,9 +18,9 @@ class MMU {
   constructor() {
     const PtMem = [];
     PtMem[0x0000] = PageDirectory;
-    PtMem[0x4000] = ptTable_1;
-    PtMem[0x5100] = ptTable_2;
-    PtMem[0x6200] = ptTable_3;
+    PtMem[PageDirectory.entries[0].addr] = ptTable_1;
+    PtMem[PageDirectory.entries[1].addr] = ptTable_2;
+    PtMem[PageDirectory.entries[2].addr] = ptTable_3;
     this.ptMemHandler = new PageTableMem(PtMem);
 
     // idxsize, offsetsize, mem off, lvl

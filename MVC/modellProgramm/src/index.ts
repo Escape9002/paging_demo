@@ -5,8 +5,8 @@ export default function main() {
 
   console.log(mmu.resolve('00004200123'));
   console.log(mmu.resolve('00015300123'));
-  // console.log(mmu.resolve('00026000123'));
-  // console.log(mmu.resolve('00034200123'));
+  console.log(mmu.resolve('00026000123'));
+  console.log(mmu.resolve('00034200123'));
 }
 
 main();

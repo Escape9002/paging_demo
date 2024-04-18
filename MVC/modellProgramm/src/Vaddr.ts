@@ -1,4 +1,4 @@
-import Arch from './Arch';
+import Arch from './arch/Arch';
 import PageTableMem from './PageTableMem';
 import {flags} from './flags';
 export default class Vaddr {
