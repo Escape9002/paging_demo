@@ -1,7 +1,8 @@
-import PageTable from '../PageTable';
-import PageTableEntry from '../PageTableEntry';
-import {PageDirectory} from './PageDirectory';
-import {ptTable_1, ptTable_2, ptTable_3} from './PageTables';
+import PageTable from './PageTable';
+import PageTableEntry from './PageTableEntry';
+import PageTableMem from './PageTableMem';
+import {PageDirectory} from '../arch/PageDirectory';
+import {ptTable_1, ptTable_2, ptTable_3} from '../arch/PageTables';
 
 class Arch {
   offsetSize: number;
@@ -33,13 +34,4 @@ class Arch {
   }
 }
 
-let arch = new Arch(
-  4, // idx size (bits)
-  3, // offsetsize (bits)
-  0x0000, // memoffset
-  2 // page-levels
-);
-
-export {PageDirectory, ptTable_1, ptTable_2, ptTable_3};
-export {arch};
 export default Arch;
