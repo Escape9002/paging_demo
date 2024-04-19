@@ -1,5 +1,5 @@
-import PageTable from '../PageTable';
-import PageTableEntry from '../PageTableEntry';
+import PageTable from '../paging_controller/PageTable';
+import PageTableEntry from '../paging_controller/PageTableEntry';
 
 const pt1Entries: PageTableEntry[] = [];
 pt1Entries[0x4000] = new PageTableEntry(0x4000, {

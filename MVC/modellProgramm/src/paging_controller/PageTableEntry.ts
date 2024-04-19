@@ -1,4 +1,6 @@
+import {MMUError} from '../commands';
 import {flags} from './flags';
+
 export default class PageTableEntry {
   flags: flags;
   addr: number;
@@ -7,10 +9,14 @@ export default class PageTableEntry {
     this.addr = addr;
   }
 
-  resolve(flags: flags) {
+  resolve(flags: flags): number | MMUError {
     if ((flags = flags)) {
       return this.addr;
     }
-    return 666;
+
+    return new MMUError({
+      name: 'FALSE_FLAGS',
+      message: 'You lack permission to acces this.',
+    });
   }
 }

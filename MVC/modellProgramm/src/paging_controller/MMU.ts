@@ -1,4 +1,7 @@
+import {MMUError} from '../commands';
+import StateMachine from '../StateMachine';
 import Arch from './Arch';
+import {flags} from './flags';
 import PageTable from './PageTable';
 import PageTableEntry from './PageTableEntry';
 import PageTableMem from './PageTableMem';
@@ -8,43 +11,81 @@ class MMU {
   ptMemHandler: PageTableMem;
   arch: Arch;
   vaddrHandler: Vaddr;
+  stateMachine: StateMachine;
 
   constructor(arch: Arch, ptMem: PageTableMem) {
     this.ptMemHandler = ptMem;
     this.arch = arch;
     this.vaddrHandler = new Vaddr(this.arch, this.ptMemHandler);
+    this.stateMachine = new StateMachine();
   }
 
   resolve(vaddr: string) {
-    if (this.arch.validUserInput(vaddr)) {
-      let parsedVaddr: number[] = this.vaddrHandler.parseUserInput(vaddr);
-      let memOffset = this.vaddrHandler.getOffset();
+    let userVaddrError: MMUError | undefined = this.arch.validUserInput(vaddr);
+    this.stateMachine.logState({
+      kind: 'GETVADDR',
+      context: {
+        vAddr: vaddr,
+        value: userVaddrError,
+      },
+    });
 
-      // let memOffset = this.arch.mem_offset;
+    let parsedVaddr: number[] = this.vaddrHandler.parseUserInput(vaddr);
 
-      let Pt: PageTable = this.ptMemHandler.getAddr(memOffset);
+    let memOffset = this.vaddrHandler.getOffset(); //TODO show where the offset is grabbed from (statemachine log) use the IDX command
 
-      let lvl = 0;
-      let addr = 0;
-      while (lvl < this.arch.level) {
-        let ptEntry: PageTableEntry = Pt.resolve(parsedVaddr[lvl]);
+    let Pt: PageTable | MMUError = this.ptMemHandler.getAddr(memOffset);
+    this.stateMachine.logState({
+      kind: 'GETIDX',
+      context: {
+        memOffset: memOffset,
+        value: Pt,
+      },
+    });
 
-        addr = ptEntry.resolve({
+    let lvl = 0;
+    let addr: number | MMUError = 0;
+    while (lvl < this.arch.level && Pt instanceof PageTable) {
+      let ptEntry: PageTableEntry | MMUError = Pt.resolve(parsedVaddr[lvl]);
+      this.stateMachine.logState({
+        kind: 'RESOLVEADDR',
+        context: {
+          vAddr: parsedVaddr[lvl],
+          value: ptEntry,
+        },
+      });
+
+      if (ptEntry instanceof PageTableEntry) {
+        const static_flags: flags = {
           write: true,
           read: true,
           present: true,
           user: 2,
+        };
+        addr = ptEntry.resolve(static_flags);
+        this.stateMachine.logState({
+          kind: 'RESOLVEFLAGS',
+          context: {
+            flags: static_flags,
+            value: addr,
+          },
         });
 
-        Pt = this.ptMemHandler.getAddr(addr);
-
-        lvl++;
+        if (typeof addr == 'number') {
+          Pt = this.ptMemHandler.getAddr(addr);
+          this.stateMachine.logState({
+            kind: 'GETIDX',
+            context: {
+              memOffset: memOffset,
+              value: Pt,
+            },
+          });
+        }
       }
-      return (
-        addr.toString(16) + '|' + parsedVaddr[this.arch.level].toString(16)
-      );
+
+      lvl++;
     }
-    return 'wrong arch';
+    return addr.toString(16) + '|' + parsedVaddr[this.arch.level].toString(16);
   }
 }
 

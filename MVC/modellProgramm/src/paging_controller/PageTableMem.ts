@@ -1,3 +1,4 @@
+import {MMUError} from '../commands';
 import PageTable from './PageTable';
 import PageTableEntry from './PageTableEntry';
 
@@ -7,20 +8,15 @@ export default class PageTableMem {
     this.ptMapping = ptMapping;
   }
 
-  getAddr(mem_offset: number) {
-    try {
-      let wantedPt = this.ptMapping[mem_offset];
+  getAddr(mem_offset: number): PageTable | MMUError {
+    let wantedPt: PageTable | undefined = this.ptMapping[mem_offset];
+    if (wantedPt != undefined) {
       return wantedPt;
-    } catch (e) {
-      console.log(e);
-      return new PageTable([
-        new PageTableEntry(0x000, {
-          write: false,
-          read: false,
-          present: false,
-          user: 0,
-        }),
-      ]);
     }
+
+    return new MMUError({
+      name: 'NO_PAGE_TABLE',
+      message: 'For this MEMOFFSET no PageDirectory was found',
+    });
   }
 }

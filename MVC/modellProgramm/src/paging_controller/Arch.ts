@@ -1,8 +1,4 @@
-import PageTable from './PageTable';
-import PageTableEntry from './PageTableEntry';
-import PageTableMem from './PageTableMem';
-import {PageDirectory} from '../arch/PageDirectory';
-import {ptTable_1, ptTable_2, ptTable_3} from '../arch/PageTables';
+import {MMUError} from '../commands';
 
 class Arch {
   offsetSize: number;
@@ -22,15 +18,23 @@ class Arch {
     this.level = level;
   }
 
-  validUserInput(vaddr: string) {
+  validUserInput(vaddr: string): undefined | MMUError {
     vaddr.trim();
+    let vAddrCheck = undefined;
     if (vaddr.length < this.offsetSize + this.idxSize * this.level) {
-      return false;
+      vAddrCheck = new MMUError({
+        name: 'WRONG_VADDR',
+        message: 'vAddr too small',
+      });
     }
     if (vaddr.length > this.offsetSize + this.idxSize * this.level) {
-      return false;
+      vAddrCheck = new MMUError({
+        name: 'WRONG_VADDR',
+        message: 'vAddr too big',
+      });
     }
-    return true;
+
+    return vAddrCheck;
   }
 }
 

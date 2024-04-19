@@ -1,3 +1,4 @@
+import {MMUError} from '../commands';
 import PageTableEntry from './PageTableEntry';
 
 export default class PageTable {
@@ -7,19 +8,15 @@ export default class PageTable {
     this.entries = ptEntries;
   }
 
-  resolve(vaddr: number): PageTableEntry {
-    try {
-      let entry = this.entries[vaddr];
-
+  resolve(vaddr: number): PageTableEntry | MMUError {
+    let entry = this.entries[vaddr];
+    if (entry != undefined) {
       return entry;
-    } catch (e) {
-      console.log(e);
-      return new PageTableEntry(0x000, {
-        write: false,
-        read: false,
-        present: false,
-        user: 0,
-      });
     }
+
+    return new MMUError({
+      name: 'NO_PAGE_TABLE',
+      message: 'For the given VADDR, no PageTable was found.',
+    });
   }
 }

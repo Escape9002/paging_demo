@@ -1,6 +1,7 @@
 import Arch from './Arch';
 import PageTableMem from './PageTableMem';
 import {flags} from './flags';
+
 export default class Vaddr {
   arch: Arch;
   ptMem: PageTableMem;
@@ -9,7 +10,7 @@ export default class Vaddr {
     this.ptMem = ptMem;
   }
 
-  getOffset() {
+  getOffset(): number {
     return this.arch.mem_offset;
   }
 
@@ -30,6 +31,7 @@ export default class Vaddr {
 
       splitVAddr.push(vaddrNumber);
     }
+
     return splitVAddr;
   }
 }

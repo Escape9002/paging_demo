@@ -1,44 +1,60 @@
 // https://blog.logrocket.com/put-the-typescript-enums-and-booleans-away/
 
+import {ErrorBase} from './ErrorBase';
 import {flags} from './paging_controller/flags';
 import PageTable from './paging_controller/PageTable';
+import PageTableEntry from './paging_controller/PageTableEntry';
 import PageTableMem from './paging_controller/PageTableMem';
 
-export type States =
+type States =
   | {
       kind: 'GETVADDR';
       context: {
-        vAddr: number;
-        error?: Error;
+        vAddr: string;
+        value?: MMUError;
+      };
+    }
+  | {
+      kind: 'PARSEVADDR';
+      context: {
+        vAddr: number[];
+        value?: MMUError;
       };
     }
   | {
       kind: 'GETIDX';
       context: {
         memOffset: number;
-        ptDirectory: PageTableMem;
-        error?: Error;
+        value: PageTable | MMUError;
       };
     }
   | {
       kind: 'RESOLVEADDR';
       context: {
         vAddr: number;
-        ptTable: PageTable;
-        error?: Error;
+        value: PageTableEntry | MMUError;
       };
     }
   | {
       kind: 'RESOLVEFLAGS';
       context: {
         flags: flags;
-        error?: Error;
+        value?: number | MMUError;
       };
     }
   | {
       kind: 'HARDWAREADDR';
       context: {
         addr: number;
-        error?: Error;
+        value?: MMUError;
       };
     };
+
+export default States;
+
+type ErrorName =
+  | 'WRONG_VADDR'
+  | 'NO_TABLE_ENTRY'
+  | 'NO_PAGE_TABLE'
+  | 'FALSE_FLAGS';
+export class MMUError extends ErrorBase<ErrorName> {}

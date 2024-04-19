@@ -1,5 +1,5 @@
-import {arch, PtMem} from '../src/arch/arch';
-import MMU from '../src/paging_controller/MMU';
+import MMU from './paging_controller/MMU';
+import {arch, PtMem} from './arch/arch';
 
 export default function main() {
   let mmu = new MMU(arch, PtMem);
