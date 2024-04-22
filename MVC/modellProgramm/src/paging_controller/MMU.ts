@@ -71,7 +71,7 @@ class MMU {
           },
         });
 
-        if (typeof addr == 'number') {
+        if (typeof addr == 'number' && lvl < this.arch.level - 1) {
           Pt = this.ptMemHandler.getAddr(addr);
           this.stateMachine.logState({
             kind: 'GETIDX',

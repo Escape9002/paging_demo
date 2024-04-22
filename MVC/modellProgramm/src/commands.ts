@@ -4,7 +4,6 @@ import {ErrorBase} from './ErrorBase';
 import {flags} from './paging_controller/flags';
 import PageTable from './paging_controller/PageTable';
 import PageTableEntry from './paging_controller/PageTableEntry';
-import PageTableMem from './paging_controller/PageTableMem';
 
 type States =
   | {
