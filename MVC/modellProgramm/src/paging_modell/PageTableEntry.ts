@@ -1,4 +1,4 @@
-import {MMUError} from '../commands';
+import {MMUError} from '../state_controller/commands';
 import {flags} from './flags';
 
 export default class PageTableEntry {

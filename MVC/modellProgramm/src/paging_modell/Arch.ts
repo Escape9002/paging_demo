@@ -1,4 +1,4 @@
-import {MMUError} from '../commands';
+import {MMUError} from '../state_controller/commands';
 
 class Arch {
   offsetSize: number;

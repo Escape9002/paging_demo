@@ -1,6 +1,6 @@
-import PageTable from '../paging_controller/PageTable';
-import PageTableMem from '../paging_controller/PageTableMem';
-import Arch from '../paging_controller/Arch';
+import PageTable from '../paging_modell/PageTable';
+import PageTableMem from '../paging_modell/PageTableMem';
+import Arch from '../paging_modell/Arch';
 import {PageDirectory} from './PageDirectory';
 import {ptTable_1, ptTable_2, ptTable_3} from './PageTables';
 

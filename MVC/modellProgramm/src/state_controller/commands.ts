@@ -1,9 +1,9 @@
 // https://blog.logrocket.com/put-the-typescript-enums-and-booleans-away/
 
 import {ErrorBase} from './ErrorBase';
-import {flags} from './paging_controller/flags';
-import PageTable from './paging_controller/PageTable';
-import PageTableEntry from './paging_controller/PageTableEntry';
+import {flags} from '../paging_modell/flags';
+import PageTable from '../paging_modell/PageTable';
+import PageTableEntry from '../paging_modell/PageTableEntry';
 
 type States =
   | {
@@ -16,8 +16,8 @@ type States =
   | {
       kind: 'PARSEVADDR';
       context: {
-        vAddr: number[];
-        value?: MMUError;
+        vAddr: string;
+        value?: number[] | MMUError;
       };
     }
   | {

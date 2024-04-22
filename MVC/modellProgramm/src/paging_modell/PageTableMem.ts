@@ -1,4 +1,4 @@
-import {MMUError} from '../commands';
+import {MMUError} from '../state_controller/commands';
 import PageTable from './PageTable';
 import PageTableEntry from './PageTableEntry';
 

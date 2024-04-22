@@ -1,4 +1,4 @@
-import MMU from './paging_controller/MMU';
+import MMU from './paging_modell/MMU';
 import {arch, PtMem} from './arch/arch';
 
 export default function main() {

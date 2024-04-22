@@ -1,5 +1,5 @@
-import {MMUError} from '../commands';
-import StateMachine from '../StateMachine';
+import {MMUError} from '../state_controller/commands';
+import StateMachine from '../state_controller/StateMachine';
 import Arch from './Arch';
 import {flags} from './flags';
 import PageTable from './PageTable';
@@ -30,7 +30,15 @@ class MMU {
       },
     });
 
-    let parsedVaddr: number[] = this.vaddrHandler.parseUserInput(vaddr);
+    let parsedVaddr: number[] | MMUError =
+      this.vaddrHandler.parseUserInput(vaddr);
+    this.stateMachine.logState({
+      kind: 'PARSEVADDR',
+      context: {
+        vAddr: vaddr,
+        value: parsedVaddr,
+      },
+    });
 
     let memOffset = this.vaddrHandler.getOffset(); //TODO show where the offset is grabbed from (statemachine log) use the IDX command
 
@@ -80,6 +88,8 @@ class MMU {
               value: Pt,
             },
           });
+        } else {
+          console.log(this.stateMachine.stateMachine);
         }
       }
 

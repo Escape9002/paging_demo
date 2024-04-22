@@ -1,5 +1,5 @@
-import PageTable from '../paging_controller/PageTable';
-import PageTableEntry from '../paging_controller/PageTableEntry';
+import PageTable from '../paging_modell/PageTable';
+import PageTableEntry from '../paging_modell/PageTableEntry';
 
 let ptEntries = [];
 ptEntries[0x0000] = new PageTableEntry(0x4000, {
