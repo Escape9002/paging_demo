@@ -18,23 +18,21 @@ class Arch {
     this.level = level;
   }
 
-  validUserInput(vaddr: string): undefined | MMUError {
+  validUserInput(vaddr: string) {
     vaddr.trim();
     let vAddrCheck = undefined;
     if (vaddr.length < this.offsetSize + this.idxSize * this.level) {
-      vAddrCheck = new MMUError({
+      throw new MMUError({
         name: 'WRONG_VADDR',
         message: 'vAddr too small',
       });
     }
     if (vaddr.length > this.offsetSize + this.idxSize * this.level) {
-      vAddrCheck = new MMUError({
+      throw new MMUError({
         name: 'WRONG_VADDR',
         message: 'vAddr too big',
       });
     }
-
-    return vAddrCheck;
   }
 }
 

@@ -10,44 +10,66 @@ type States =
       kind: 'GETVADDR';
       context: {
         vAddr: string;
-        value?: MMUError;
+        desc?: 'Validates if the users entry fits the given arch. (vaddr-bit length check)';
+        value?: MMUError<'WRONG_VADDR'>;
       };
     }
   | {
       kind: 'PARSEVADDR';
       context: {
         vAddr: string;
-        value?: number[] | MMUError;
+        desc?: 'Passes the numeric, split Vaddr to the frontend.';
+        value?: number[] | MMUError<'WRONG_VADDR'>;
       };
     }
   | {
       kind: 'GETIDX';
       context: {
-        memOffset: number;
-        value: PageTable | MMUError;
+        PtAddr: number;
+        desc?: 'Gets new Pt with the given (v)addr.';
+        value: PageTable | MMUError<'NO_PAGE_TABLE'>;
       };
     }
   | {
       kind: 'RESOLVEADDR';
       context: {
         vAddr: number;
-        value: PageTableEntry | MMUError;
+        desc?: 'Checks wether the addr exists in the Pt and returns the PtE.';
+        value: PageTableEntry | MMUError<'NO_TABLE_ENTRY'>;
       };
     }
   | {
       kind: 'RESOLVEFLAGS';
       context: {
         flags: flags;
-        value?: number | MMUError;
-      };
-    }
-  | {
-      kind: 'HARDWAREADDR';
-      context: {
-        addr: number;
-        value?: MMUError;
+        desc?: 'checks the permission flags.';
+        value?: number | MMUError<'FALSE_FLAGS'>;
       };
     };
+// | {
+//     kind: 'VALID';
+//     context: {
+//       flags: flags;
+//       desc?: 'checks the perstist flag';
+//       value?: boolean | MMUError;
+//     };
+//   }
+// | {
+//     kind: 'READWRITE';
+//     context: {
+//       flags: flags;
+//       desc?: 'checks the read/write flag';
+//       value?: boolean | MMUError;
+//     };
+//   }
+// | {
+//     kind: 'USERMODE';
+//     context: {
+//       flags: flags;
+//       desc?: 'checks the usermode flag';
+//       value?: number | MMUError;
+//     };
+//   };
 
 export default States;
 
@@ -56,4 +78,13 @@ type ErrorName =
   | 'NO_TABLE_ENTRY'
   | 'NO_PAGE_TABLE'
   | 'FALSE_FLAGS';
-export class MMUError extends ErrorBase<ErrorName> {}
+
+export class MMUError<T extends ErrorName> extends ErrorBase<T> {
+  constructor({name, message, cause}: {name: T; message: string; cause?: any}) {
+    super({name, message, cause});
+    Object.setPrototypeOf(this, MMUError.prototype);
+    // Set the prototype explicitly.
+    // This has to be directly under super.
+    // This ensures that MMUError Objects are recognised as such by "instanceof"
+  }
+}

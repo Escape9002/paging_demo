@@ -8,13 +8,13 @@ export default class PageTableMem {
     this.ptMapping = ptMapping;
   }
 
-  getAddr(mem_offset: number): PageTable | MMUError {
+  getAddr(mem_offset: number): PageTable {
     let wantedPt: PageTable | undefined = this.ptMapping[mem_offset];
     if (wantedPt != undefined) {
       return wantedPt;
     }
 
-    return new MMUError({
+    throw new MMUError({
       name: 'NO_PAGE_TABLE',
       message: 'For this MEMOFFSET no PageDirectory was found',
     });
