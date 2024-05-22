@@ -1,21 +1,65 @@
 import {MMUError} from '../state_controller/commands';
 
+type BitsArch = {
+  32: {offsetSize: number; idxSize: number};
+  64: {offsetSize: number; idxSize: number};
+};
+
 class Arch {
+  bits: number;
   offsetSize: number;
   idxSize: number;
   mem_offset: number;
   level: number;
 
-  constructor(
-    idxSize: number,
-    offsetSize: number,
-    mem_offset: number,
-    level: number
-  ) {
-    this.offsetSize = offsetSize;
-    this.idxSize = idxSize;
+  constructor(bits: number, mem_offset: number, level: number) {
+    this.bits = bits;
     this.mem_offset = mem_offset;
     this.level = level;
+
+    const archConfig: BitsArch = {
+      32: {offsetSize: 12, idxSize: 10},
+      64: {offsetSize: 20, idxSize: 22},
+    };
+
+    const config = archConfig[32]; // TODO no hardcode here pls
+    if (!config) {
+      throw new Error(`Unsupported architecture: ${bits}`);
+    }
+
+    this.offsetSize = config.offsetSize;
+    this.idxSize = config.idxSize;
+  }
+
+  getPageLevel(): number {
+    if ((this, this.level != undefined)) {
+      return this.level;
+    }
+    throw new MMUError({
+      name: 'NO_PAGETABLE_DEPTH',
+      message: 'could not load pagetable depth from Arch',
+    });
+  }
+  getBits(): number {
+    if (this.bits != undefined) {
+      return this.bits;
+    }
+
+    throw new MMUError({
+      name: 'NO_BITS_CONFIG',
+      message: 'could not load arch-bits from Arch',
+    });
+  }
+
+  getMemOffset(): number {
+    if (this.mem_offset != undefined) {
+      return this.mem_offset;
+    }
+
+    throw new MMUError({
+      name: 'NO_MEM_OFFSET',
+      message: 'There is no MemOffset defined to find the first PageTable',
+    });
   }
 
   validUserInput(vaddr: string) {

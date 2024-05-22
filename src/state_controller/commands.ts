@@ -4,30 +4,39 @@ import {ErrorBase} from './ErrorBase';
 import {flags} from '../paging_modell/flags';
 import PageTable from '../paging_modell/PageTable';
 import PageTableEntry from '../paging_modell/PageTableEntry';
+import PageTableMem from '../paging_modell/PageTableMem';
 
 type States =
   | {
+      kind: 'GETARCH';
+      context: {
+        bits: number | MMUError<'NO_BITS_CONFIG'>;
+        lvl: number | MMUError<'NO_PAGETABLE_DEPTH'>;
+        memOffset: number | MMUError<'NO_MEM_OFFSET'>;
+        desc?: 'returns the Arch of the system.';
+      };
+    }
+  | {
       kind: 'GETVADDR';
       context: {
-        vAddr: string;
+        vAddr: string | MMUError<'WRONG_VADDR'>;
+        parsedVaddr: number[] | MMUError<'WRONG_VADDR'>;
         desc?: 'Validates if the users entry fits the given arch. (vaddr-bit length check)';
-        value?: MMUError<'WRONG_VADDR'>;
       };
     }
   | {
-      kind: 'PARSEVADDR';
+      kind: 'GETPAGEMEM';
       context: {
-        vAddr: string;
-        desc?: 'Passes the numeric, split Vaddr to the frontend.';
-        value?: number[] | MMUError<'WRONG_VADDR'>;
+        pageMem: PageTable[] | MMUError<'NO_PAGETABLE_MEM'>;
+        desc?: 'Pases the PageTable Mem through to the frontend';
       };
     }
   | {
-      kind: 'GETIDX';
+      kind: 'GETIDX'; //TODO first time, return the pagemem, then return the indexes we use, not the tables
       context: {
         PtAddr: number;
         desc?: 'Gets new Pt with the given (v)addr.';
-        value: PageTable | MMUError<'NO_PAGE_TABLE'>;
+        value: PageTable | MMUError<'NO_PAGETABLE'>;
       };
     }
   | {
@@ -39,15 +48,16 @@ type States =
       };
     }
   | {
-      kind: 'RESOLVEFLAGS';
+      kind: 'RESOLVEFLAGS'; //TODO implement flag resolvers
       context: {
         flags: flags;
         desc?: 'checks the permission flags.';
         value?: number | MMUError<'FALSE_FLAGS'>;
       };
     };
+//TODO final state with returned Hardwareaddr, add field for vaddr-offset for final hardware address
 // | {
-//     kind: 'VALID';
+//     kind: 'PRESENT';
 //     context: {
 //       flags: flags;
 //       desc?: 'checks the perstist flag';
@@ -74,9 +84,13 @@ type States =
 export default States;
 
 type ErrorName =
+  | 'NO_PAGETABLE_DEPTH'
+  | 'NO_BITS_CONFIG'
+  | 'NO_MEM_OFFSET'
   | 'WRONG_VADDR'
+  | 'NO_PAGETABLE_MEM'
   | 'NO_TABLE_ENTRY'
-  | 'NO_PAGE_TABLE'
+  | 'NO_PAGETABLE'
   | 'FALSE_FLAGS';
 
 export class MMUError<T extends ErrorName> extends ErrorBase<T> {

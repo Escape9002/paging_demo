@@ -5,6 +5,7 @@ import {PageDirectory} from './PageDirectory';
 import {ptTable_1, ptTable_2, ptTable_3} from './PageTables';
 
 let arch = new Arch(
+  32, //bit architecture
   4, // idx size (bits)
   3, // offsetsize (bits)
   0x0000, // memoffset

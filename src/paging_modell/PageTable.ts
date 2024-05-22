@@ -15,7 +15,7 @@ export default class PageTable {
     }
 
     throw new MMUError({
-      name: 'NO_PAGE_TABLE',
+      name: 'NO_PAGETABLE',
       message: 'For the given VADDR, no PageTable was found.',
     });
   }

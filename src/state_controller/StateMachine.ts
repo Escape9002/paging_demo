@@ -7,13 +7,10 @@ export default class StateMachine {
   logState(state: States, consoleLog: boolean = false) {
     this.stateMachine.push(state);
 
-    if (state.context.value instanceof Error && consoleLog) {
+    if (state.context instanceof Error && consoleLog) {
       console.log(
         '/// ERROR ///\n' +
-          state.context.value.name +
-          '\n' +
-          state.context.value.message +
-          '\n' +
+          state.context +
           '/// ERROR ///\n' +
           '--------------\n' +
           'originating from:\n' +
