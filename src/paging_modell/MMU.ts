@@ -21,6 +21,8 @@ class MMU {
   }
 
   resolve(vaddr: string) {
+    this.stateMachine = new StateMachine();
+    
     let userVaddrError: MMUError | undefined = this.arch.validUserInput(vaddr);
     this.stateMachine.logState({
       kind: 'GETVADDR',
