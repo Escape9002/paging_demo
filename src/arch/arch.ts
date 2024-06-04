@@ -6,10 +6,8 @@ import {ptTable_1, ptTable_2, ptTable_3} from './PageTables';
 
 let arch = new Arch(
   32, //bit architecture
-  4, // idx size (bits)
-  3, // offsetsize (bits)
   0x0000, // memoffset
-  2 // page-levels
+  2 // page levels
 );
 
 const PtMemArray: PageTable[] = [];

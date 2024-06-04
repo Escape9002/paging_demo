@@ -1,8 +1,12 @@
 import {MMUError} from '../state_controller/commands';
 
-type BitsArch = {
-  32: {offsetSize: number; idxSize: number};
-  64: {offsetSize: number; idxSize: number};
+interface BitsArchType {
+  [key: number]: { offsetSize: number; idxSize: number };
+}
+const BitsArch: BitsArchType = {
+  11: {offsetSize: 4, idxSize: 3},
+  32: {offsetSize: 12, idxSize: 10},
+  64: {offsetSize: 20, idxSize: 22},
 };
 
 class Arch {
@@ -12,17 +16,14 @@ class Arch {
   mem_offset: number;
   level: number;
 
-  constructor(bits: number, mem_offset: number, level: number) {
+  constructor(bits: number,  mem_offset: number, level: number) {
     this.bits = bits;
     this.mem_offset = mem_offset;
     this.level = level;
 
-    const archConfig: BitsArch = {
-      32: {offsetSize: 12, idxSize: 10},
-      64: {offsetSize: 20, idxSize: 22},
-    };
+  
 
-    const config = archConfig[32]; // TODO no hardcode here pls
+    const config = BitsArch[bits]; // TODO no hardcode here pls
     if (!config) {
       throw new Error(`Unsupported architecture: ${bits}`);
     }
