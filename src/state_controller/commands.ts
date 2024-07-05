@@ -52,7 +52,7 @@ type States =
       context: {
         flags: flags;
         desc?: 'checks the permission flags.';
-        value?: number | MMUError<'FALSE_FLAGS'>;
+        value?: number | MMUError<'PRESENT_BIT'> | MMUError<'READ_WRITE'> | MMUError<'USER_MODE'>;
       };
     };
 //TODO final state with returned Hardwareaddr, add field for vaddr-offset for final hardware address
@@ -61,7 +61,7 @@ type States =
 //     context: {
 //       flags: flags;
 //       desc?: 'checks the perstist flag';
-//       value?: boolean | MMUError;
+//       value?: boolean | MMUError<'PRESENT_BIT'>;
 //     };
 //   }
 // | {
@@ -69,7 +69,7 @@ type States =
 //     context: {
 //       flags: flags;
 //       desc?: 'checks the read/write flag';
-//       value?: boolean | MMUError;
+//       value?: boolean | MMUError<'READ_WRITE'>;
 //     };
 //   }
 // | {
@@ -77,9 +77,9 @@ type States =
 //     context: {
 //       flags: flags;
 //       desc?: 'checks the usermode flag';
-//       value?: number | MMUError;
+//       value?: number | MMUError<'USER_MODE'>;
 //     };
-//   };
+  // };
 
 export default States;
 
@@ -91,7 +91,10 @@ type ErrorName =
   | 'NO_PAGETABLE_MEM'
   | 'NO_TABLE_ENTRY'
   | 'NO_PAGETABLE'
-  | 'FALSE_FLAGS';
+  // | 'FALSE_FLAGS'
+  | 'PRESENT_BIT'
+  | 'READ_WRITE'
+  | 'USER_MODE';
 
 export class MMUError<T extends ErrorName> extends ErrorBase<T> {
   constructor({name, message, cause}: {name: T; message: string; cause?: any}) {

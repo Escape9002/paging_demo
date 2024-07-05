@@ -3,7 +3,7 @@
 
 The following page-walk is generalised for a 32bit, 2 level pagedirectory config
 
-1. get architecture (32/64, amount of page-levels)
+1. get architecture (11/32/64, amount of page-levels)
 2. get page-directory address (here named memoffset)
 3. resolve first section of vaddr (10-bits)
 4. validate flags, get addr for page-table

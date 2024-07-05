@@ -31,7 +31,7 @@ class MMU {
     ]);
   }
 
-  resolve(vaddr: string): States[] {
+  resolve(vaddr: string, flags:flags): States[] {
     this.stateMachine = new StateMachine();
     let PageLevel: number = 0;
     let ArchBits: number = 0;
@@ -156,19 +156,12 @@ class MMU {
         return this.stateMachine.stateMachine;
       }
 
-      const static_flags: flags = {
-        write: true,
-        read: true,
-        present: true,
-        user: 2,
-      };
-
       try {
-        addr = ptEntry.resolve(static_flags);
+        addr = ptEntry.resolve(flags);
         this.stateMachine.logState({
           kind: 'RESOLVEFLAGS',
           context: {
-            flags: static_flags,
+            flags: flags,
             value: addr,
           },
         });
@@ -177,7 +170,7 @@ class MMU {
           this.stateMachine.logState({
             kind: 'RESOLVEFLAGS',
             context: {
-              flags: static_flags,
+              flags: flags,
               value: error,
             },
           });

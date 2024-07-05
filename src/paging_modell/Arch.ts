@@ -4,7 +4,7 @@ interface BitsArchType {
   [key: number]: { offsetSize: number; idxSize: number };
 }
 const BitsArch: BitsArchType = {
-  11: {offsetSize: 4, idxSize: 3},
+  11: {offsetSize: 3, idxSize: 4},
   32: {offsetSize: 12, idxSize: 10},
   64: {offsetSize: 20, idxSize: 22},
 };
@@ -23,7 +23,7 @@ class Arch {
 
   
 
-    const config = BitsArch[bits]; // TODO no hardcode here pls
+    const config = BitsArch[bits];
     if (!config) {
       throw new Error(`Unsupported architecture: ${bits}`);
     }
@@ -65,7 +65,7 @@ class Arch {
 
   validUserInput(vaddr: string) {
     vaddr.trim();
-    let vAddrCheck = undefined;
+    // let vAddrCheck = undefined;
     if (vaddr.length < this.offsetSize + this.idxSize * this.level) {
       throw new MMUError({
         name: 'WRONG_VADDR',
